@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Generator - URL</title>
+    <link rel="stylesheet" href="css/home.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+   <!-- Header -->
+   <header class="header" id="header">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="image/logo1.png" alt="Logo" class="logo-img" />
+    </div>
+
+    <!-- Username atau Tombol Login/Register -->
+    <div class="user-info" id="user-info">
+      <!-- Akan diisi oleh JavaScript -->
+    </div>
+  </header>
+
+    <!-- Container Utama -->
+    <div class="container">
+      <!-- Form Input -->
+      <div class="left-content">
+        <h1>Buat Kode QR</h1>
+
+        <!-- Tab Navigasi -->
+        <div class="tab-buttons">
+          <a href="home.html" class="tab-btn active">URL</a>
+          <a href="doc.html" class="tab-btn">Dokumen</a>
+          <a href="signature.html" class="tab-btn">Tanda Tangan</a>
+        </div>
+
+        <!-- Tab Input URL -->
+        <div id="url" class="tab-content active">
+          <input type="url" id="urlInput" placeholder="Masukkan URL Anda" />
+          <input type="text" id="urlName" placeholder="Masukkan Nama QR Code Anda" />
+          <label>
+            <input type="checkbox" id="sessionToggle" />
+            Buat sebagai QR Session (Valid untuk beberapa menit)
+          </label>
+          <a onclick="generateQRCode('url')">Buat QR Code</a>
+        </div>
+
+      <!-- Output QR Code -->
+      <div id="qrcode" style="display: none">
+        <h3></h3>
+        <canvas></canvas>
+        <div class="button-group">
+          <a id="downloadBtn" style="display: none">
+            <button>Download QR Code</button>
+          </a>
+          <button onclick="resetForm()">Buat QR Code Baru</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-menu">
+        <a href="index.html" class="menu-item">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="history.html" class="menu-item">
+          <i class="fas fa-clipboard-list"></i>
+          <span>History</span>
+        </a>
+        <a href="profile.html" class="menu-item">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </footer>
+
+    <!-- Library QRious untuk Generate QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <!-- File JavaScript untuk Logika Halaman -->
+    <script type="module" src="js/home.js"></script>
+  </body>
+</html>
