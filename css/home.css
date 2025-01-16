@@ -1,0 +1,388 @@
+/* Styling Global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: url("")
+    no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+/* Overlay */
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 500px; /* Atur lebar maksimum */
+  margin: auto;
+  padding: 20px;
+  background: white;
+  color: #333;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Left Content */
+.left-content {
+  flex: 1;
+  padding-right: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.left-content {
+  padding-top: 20px; /* Menambahkan spasi di atas konten input */
+}
+
+.tab-buttons a {
+  text-decoration: none;  /* Menghilangkan garis bawah */
+  background-color: #007BFF; /* Biru Cerah */  
+  color: white;  
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.tab-buttons a.active {
+  background-color: #0056b3; /* Biru Tua */  
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+a {
+  background-color: #007BFF; /* Biru Cerah */ 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+a :hover {
+  background-color: #0056b3; /* Biru Tua */  
+}
+
+/* QR Code Display */
+.right-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid #ddd;
+  padding-left: 20px;
+}
+
+#qrcode h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333; 
+  text-align: center;
+}
+
+#qrcode {
+  text-align: center; /* Pusatkan konten */
+}
+
+#qrcode canvas {
+  margin: 20px auto; /* Jarak antara QR Code dan tombol */
+  display: block;
+}
+
+#qrcode .button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px; /* Jarak dari QR Code */
+}
+
+#qrcode .button-group button, #qrcode .button-group a button {
+  margin-top: 10px; /* Jarak antar tombol */
+  width: 80%; /* Tombol memenuhi lebar container */
+  max-width: 250px; /* Batas lebar maksimum tombol */
+  text-align: center;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#qrcode .button-group button:hover, #qrcode .button-group a button:hover {
+  background-color: #5a4cc0;
+}
+
+
+
+#downloadBtn {
+  display: none;
+}
+
+/* Toggle Session Styling */
+label input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 0.9em;
+  color: #333;
+}
+
+/* Footer Styles */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #0056b3;
+  border-top: 1px solid #ddd;
+  color: #333; /* Hitam */  
+  display: none; /* Hide by default */
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.footer-menu {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  background-color: #0056b3; /* Biru Tua */  
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #FFFFFF; /* Putih */  
+  font-size: 12px;
+  transition: color 0.3s;
+}
+
+.menu-item i {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.menu-item:hover {
+  color: #D3D3D3; /* Abu-abu Terang saat hover */  
+}
+
+.menu-item span {
+  font-size: 12px;
+  color: #fff;
+}
+
+/* Show footer only on mobile */
+@media (max-width: 768px) {
+  .footer {
+    display: flex;
+  }
+}
+
+/* Header Styling */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #0056b3;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Logo Container */
+.logo-img {
+  width: 40px;
+}
+
+.user-info {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+}
+
+.user-info .btn {
+  background-color: white;
+  color: #0056b3;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.user-info .btn:hover {
+  background-color: #00408a;
+  color: white;
+}
+
+/* Menu Icons */
+.menu-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.menu-icons i {
+  font-size: 20px;
+  color: #ffff;
+  cursor: pointer;
+  transition: color 0.3s;
+  cursor: pointer; /* Tambahkan cursor untuk ikon */
+}
+
+.menu-icons i:hover {
+  color: #adadad;
+}
+.menu-links {
+  display: none;
+  position: absolute;
+  top: 40px; /* Posisi relatif ke ikon */
+  right: 0;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-links a {
+  display: block;
+  padding: 5px 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.menu-links a:hover {
+  background-color: #f0f0f0;
+}
+.menu-links.active {
+  display: block;
+}
+
+/* Sembunyikan garis tiga di tampilan desktop */
+@media (min-width: 768px) {
+  .menu-icons i {
+    display: none;
+  }
+
+  .menu-links {
+    display: flex !important; /* Pastikan menu-links terlihat */
+    gap: 20px; /* Jarak antar link */
+    position: static; /* Pastikan posisinya inline */
+    background-color: transparent; /* Hilangkan warna background */
+    box-shadow: none; /* Hilangkan shadow */
+    padding: 0; /* Hilangkan padding */
+  }
+
+  .menu-links a {
+    color: white; /* Warna link */
+    font-size: 16px; /* Ukuran font */
+    text-decoration: none; /* Hilangkan underline */
+  }
+
+  .menu-links a:hover {
+    text-decoration: underline; /* Teks bergaris saat hover */
+    color: #00bcd4;
+  }
+}
+
+/* Tampilkan garis tiga di tampilan mobile */
+@media (max-width: 767px) {
+  .menu-icons i {
+    display: block;
+  }
+
+  .menu-links {
+    display: none; /* Default tersembunyi di mobile */
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-links a {
+    display: block;
+    padding: 5px 10px;
+    color: black; /* Warna link di mobile */
+  }
+}
+.menu-links a#logoutBtn {
+  color: red; /* Warna tombol logout */
+  font-weight: bold; /* Huruf tebal */
+  transition: color 0.3s;
+}
+
+.menu-links a#logoutBtn:hover {
+  color: darkred; /* Warna saat hover */
+}
+

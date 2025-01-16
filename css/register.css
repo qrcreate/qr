@@ -1,0 +1,160 @@
+/* Styling Global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0056b3; /* Warna biru */
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0; /* Tambahkan padding di atas dan bawah */
+  }
+  
+
+/* Register Container */
+.register-container {
+  display: flex;
+  max-width: 1000px;
+  width: 90%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+/* Left Section: Register Form */
+.register-form {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.register-form h1 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+.register-form p {
+  margin-bottom: 20px;
+  color: #666;
+  text-align: center;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.register-form button {
+  background-color: #6c5ce7;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 10px;
+  width: 100%;
+}
+
+
+.register-form button:hover {
+  background-color: #100089;
+}
+
+.or-separator {
+  margin: 15px 0;
+  text-align: center;
+  color: #999;
+  position: relative;
+}
+
+.or-separator::before,
+.or-separator::after {
+  content: "";
+  width: 30%;
+  height: 1px;
+  background-color: #ddd;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.or-separator::before {
+  left: 0;
+}
+
+.or-separator::after {
+  right: 0;
+}
+
+/* Google Login Button */
+.google-login {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.google-login .g_id_signin {
+  width: 100%; /* Sama dengan button */
+  max-width: 100%;
+}
+
+.google-login iframe {
+  width: 100% !important; /* Lebar penuh */
+  height: 42px !important; /* Tinggi sama seperti tombol Register */
+  border-radius: 5px;
+}
+
+/* Sudah Punya Akun Section */
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
+.login-link-text {
+  color: #6c5ce7;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link-text:hover {
+  text-decoration: underline;
+  color: #5a4cc0;
+}
+
+/* Right Section: Graphic */
+.register-graphic {
+  display: none;
+  background-color: #6c5ce7;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-graphic img {
+  width: 80%;
+  max-width: 300px;
+}
+
+@media (min-width: 768px) {
+  .register-graphic {
+    display: flex;
+  }
+}

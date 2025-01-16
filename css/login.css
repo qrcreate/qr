@@ -1,0 +1,149 @@
+ /* Styling Global */
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0056b3; /* Warna biru */
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0; /* Tambahkan padding di atas dan bawah */
+  }
+  
+
+/* Login Container */
+.login-container {
+    display: flex;
+    max-width: 1200px;
+    width: 85%;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Left Section: Login Form */
+.login-form {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-form h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 2em;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.1em;
+}
+
+.login-form button {
+    background-color: #6c5ce7;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.login-form button:hover {
+    background-color: #5a4cc0;
+}
+
+.or-separator {
+    margin: 20px 0;
+    text-align: center;
+    color: #999;
+    position: relative;
+}
+
+.or-separator::before,
+.or-separator::after {
+    content: "";
+    width: 40%;
+    height: 1px;
+    background-color: #ddd;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.or-separator::before {
+    left: 0;
+}
+
+.or-separator::after {
+    right: 0;
+}
+
+/* Google Login Custom Styling */
+.google-login .g_id_signin {
+    width: 100%;
+    max-width: none;
+}
+
+.google-login iframe {
+    width: 100% !important;
+    height: 50px !important;
+    border-radius: 5px;
+}
+
+.google-login {
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Tidak Punya Akun Section */
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1em;
+}
+
+.register-link-text {
+    color: #6c5ce7;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link-text:hover {
+    text-decoration: underline;
+    color: #5a4cc0;
+}
+
+/* Right Section: Graphic */
+.login-graphic {
+    flex: 1;
+    background-color: #6c5ce7;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-graphic img {
+    width: 100%;
+    max-width: 400px;
+}
+
+@media (min-width: 768px) {
+    .login-graphic {
+        display: flex;
+    }
+}
