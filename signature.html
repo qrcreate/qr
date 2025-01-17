@@ -11,7 +11,6 @@
     />
   </head>
   <body>
-    <!-- Header -->
     <header class="header" id="header">
       <div class="logo">
         <img src="image/logo1.png" alt="Logo" class="logo-img" />
@@ -19,19 +18,16 @@
       <div class="user-info" id="user-info"></div>
     </header>
 
-    <!-- Container Utama -->
     <div class="container">
       <div class="left-content">
         <h1>Buat Kode QR</h1>
 
-        <!-- Tab Navigasi -->
-        <div class="tab-buttons">
-          <a href="index.html" class="tab-btn">URL</a>
-          <a href="doc.html" class="tab-btn">Dokumen</a>
-          <a href="signature.html" class="tab-btn active">Tanda Tangan</a>
+        <div id="tab" class="tab-buttons">
+          <button onclick="window.location.href='index.html'" class="tab-btn">URL</button>
+          <button onclick="window.location.href='doc.html'" class="tab-btn">Dokumen</button>
+          <button onclick="window.location.href='signature.html'" class="tab-btn active">Tanda Tangan</button>
         </div>
 
-        <!-- Tab Input URL -->
         <div id="signature" class="tab-content active">
           <p><strong>Pilih Salah Satu</strong></p>
           <label for="signatureTextInput">Teks Tanda Tangan:</label>
@@ -45,12 +41,15 @@
           >
           <input type="file" id="signatureImageInput" accept="image/*" />
 
+          <label for="signatureImageInput"
+            >Nama QR Code</label
+          >
           <input
             type="text"
             id="signatureName"
             placeholder="Masukkan Nama QR Code Anda"
           />
-          <a id="generateBtn">Buat QR Code</a>
+          <button id="generateBtn">Buat QR Code</button>
         </div>
       </div>
 
@@ -62,12 +61,11 @@
           <a id="downloadBtn" style="display: none">
             <button>Download QR Code</button>
           </a>
-          <a onclick="resetForm()">Buat QR Code Baru</a>
+          <button id="buatBaruBtn" style="display: none;">Buat QR Code Baru</button>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="footer-menu">
         <a href="index.html" class="menu-item"

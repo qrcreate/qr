@@ -18,7 +18,7 @@
     <div class="container">
       <div class="left-content">
         <h1>Buat Kode QR</h1>
-        <div class="tab-buttons">
+        <div id="tab" class="tab-buttons">
           <button onclick="window.location.href='index.html'" class="tab-btn active">URL</button>
           <button onclick="window.location.href='doc.html'" class="tab-btn">Dokumen</button>
           <button onclick="window.location.href='signature.html'" class="tab-btn">Tanda Tangan</button>
@@ -27,7 +27,7 @@
         <div id="url" class="tab-content active">
           <input type="url" id="urlInput" placeholder="Masukkan URL Anda" />
           <input type="text" id="urlName" placeholder="Masukkan Nama QR Code Anda" />
-          <button id="buttonsimpaninfouser">Buat QR Code</button> <!-- ID Tombol Sesuai dengan JS -->
+          <button id="generateBtn">Buat QR Code</button>
         </div>
 
         <!-- Output QR Code -->
@@ -38,7 +38,7 @@
             <a id="downloadBtn" style="display: none;">
               <button>Download QR Code</button>
             </a>
-            <button onclick="createNewQRCode()">Buat QR Code Baru</button>
+            <button id="buatBaruBtn" style="display: none;">Buat QR Code Baru</button>
           </div>
         </div>
       </div>
