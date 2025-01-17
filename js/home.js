@@ -9,10 +9,14 @@ async function generateQRCode(type) {
   let name = "";
 
   try {
-    // Tambahkan library QR js2 jika belum dimuat
     await addScriptInHead(
       "https://cdn.jsdelivr.net/gh/englishextra/qrjs2@latest/js/qrjs2.min.js"
     );
+    if (typeof QRCode === "undefined") {
+      console.error("Library QRCode tidak dimuat.");
+      alert("Library QRCode gagal dimuat. Periksa koneksi internet Anda.");
+      return;
+    }
 
     if (type === "url") {
       value = document.getElementById("urlInput").value.trim();
@@ -36,8 +40,10 @@ async function generateQRCode(type) {
       name = document.getElementById("signatureName").value.trim();
     }
 
+    console.log("Value:", value, "Name:", name);
     if (!value || !name) {
       alert("Harap isi data yang diperlukan dan nama QR Code.");
+      console.error("Input kosong:", { value, name });
       return;
     }
 
@@ -51,8 +57,12 @@ async function generateQRCode(type) {
     });
 
     // Tampilkan QR Code
-    qrContainer.innerHTML = ""; // Hapus elemen sebelumnya
+    qrContainer.innerHTML = ""; // Kosongkan elemen sebelumnya
     qrContainer.appendChild(qr);
+
+    qrContainer.style.display = "block"; // Paksa tampilkan elemen QR Code
+    qrContainer.style.visibility = "visible"; // Pastikan elemen terlihat
+    qrContainer.style.opacity = "1"; // Pastikan tidak transparan
 
     // Jika QR Code sementara
     if (type === "url" && sessionToggle?.checked) {
@@ -85,40 +95,36 @@ function resetForm() {
   const qrContainer = document.getElementById("qrcode");
   qrContainer.innerHTML = ""; // Kosongkan QR Code
 
-  const inputs = [
-    "urlInput",
-    "urlName",
-    "documentInput",
-    "documentName",
-    "signatureTextInput",
-    "signatureImageInput",
-    "signatureName",
-  ];
-  inputs.forEach((id) => {
-    const input = document.getElementById(id);
-    if (input) input.value = "";
-  });
-
-  const sessionToggle = document.getElementById("sessionToggle");
-  if (sessionToggle) sessionToggle.checked = false;
+  // Reset hanya input yang relevan dengan halaman
+  const activeTab = document
+    .querySelector(".tab-btn.active")
+    .textContent.trim();
+  if (activeTab === "URL") {
+    document.getElementById("urlInput").value = "";
+    document.getElementById("urlName").value = "";
+    document.getElementById("sessionToggle").checked = false;
+  } else if (activeTab === "Dokumen") {
+    document.getElementById("documentInput").value = "";
+    document.getElementById("documentName").value = "";
+  } else if (activeTab === "Tanda Tangan") {
+    document.getElementById("signatureTextInput").value = "";
+    document.getElementById("signatureImageInput").value = "";
+    document.getElementById("signatureName").value = "";
+  }
 }
 
-// Panggil fungsi berdasarkan halaman aktif
+// Event Listener Global
 document.addEventListener("DOMContentLoaded", function () {
-  const pageType = document.querySelector(".tab-btn.active").textContent.trim();
-
-  if (pageType === "URL") {
-    document
-      .querySelector("#url a")
-      .addEventListener("click", () => generateQRCode("url"));
-  } else if (pageType === "Dokumen") {
-    document
-      .querySelector("#document a")
-      .addEventListener("click", () => generateQRCode("document"));
-  } else if (pageType === "Tanda Tangan") {
-    document
-      .querySelector("#signature a")
-      .addEventListener("click", () => generateQRCode("signature"));
+  const generateBtn = document.getElementById("generateBtn");
+  if (generateBtn) {
+    generateBtn.addEventListener("click", () => {
+      const activeTab = document
+        .querySelector(".tab-btn.active")
+        .textContent.trim();
+      if (activeTab === "URL") generateQRCode("url");
+      else if (activeTab === "Dokumen") generateQRCode("document");
+      else if (activeTab === "Tanda Tangan") generateQRCode("signature");
+    });
   }
 
   const resetBtn = document.querySelector("button[onclick='resetForm()']");

@@ -29,11 +29,12 @@
       <!-- Form Input -->
       <div class="left-content">
         <h1>Buat Kode QR</h1>
+
         <!-- Tab Navigasi -->
         <div class="tab-buttons">
-          <a href="home.html" class="tab-btn active">URL</a>
-          <a href="doc.html" class="tab-btn">Dokumen</a>
-          <a href="signature.html" class="tab-btn">Tanda Tangan</a>
+          <button onclick="window.location.href='index.html'" class="tab-btn active">URL</button>
+          <button onclick="window.location.href='doc.html' class="tab-btn">Dokumen</button>
+          <button onclick="window.location.href='signature.html' class="tab-btn">Tanda Tangan</button>
         </div>
 
         <!-- Tab Input URL -->
@@ -44,7 +45,7 @@
             <input type="checkbox" id="sessionToggle" />
             Buat sebagai QR Session (Valid untuk beberapa menit)
           </label>
-          <a onclick="generateQRCode('url')">Buat QR Code</a>
+          <button onclick="generateQRCode('url')">Buat QR Code</button>
         </div>
 
       <!-- Output QR Code -->
@@ -59,6 +60,7 @@
         </div>
       </div>
     </div>
+  </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -80,6 +82,7 @@
 
     <!-- Library QRious untuk Generate QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <!-- File JavaScript untuk Logika Halaman -->
     <script type="module" src="js/home.js"></script>
   </body>
 </html>

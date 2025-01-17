@@ -22,7 +22,7 @@
 
         <!-- Tab Navigasi -->
         <div class="tab-buttons">
-          <a href="home.html" class="tab-btn">URL</a>
+          <a href="index.html" class="tab-btn">URL</a>
           <a href="doc.html" class="tab-btn active">Dokumen</a>
           <a href="signature.html" class="tab-btn">Tanda Tangan</a>
         </div>
@@ -31,7 +31,7 @@
         <div id="document" class="tab-content active">
           <input type="file" id="documentInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.csv,.xls,.xlsx,.txt" />
           <input type="text" id="documentName" placeholder="Masukkan Nama QR Code Anda" />
-          <a onclick="generateQRCode('document')">Buat QR Code</a>
+          <a id="generateBtn">Buat QR Code</a>
         </div>
 
         <!-- Output QR Code -->
