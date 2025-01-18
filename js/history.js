@@ -85,19 +85,17 @@ function editQR(id) {
         title: 'Edit QR Code',
         html: `
           <input id="edit-name" class="swal2-input" value="${data.name}" placeholder="QR Name">
-          <input id="edit-url" class="swal2-input" value="${data.url}" placeholder="QR URL">
         `,
         confirmButtonText: 'Save Changes',
         showCancelButton: true,
         preConfirm: () => {
           const updatedName = document.getElementById('edit-name').value;
-          const updatedUrl = document.getElementById('edit-url').value;
-          return { name: updatedName, url: updatedUrl };
+          return { name: updatedName };
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          const { name, url } = result.value;
-          updateQR(id, name, url); 
+          const { name } = result.value;
+          updateQR(id, name); 
         }
       });
     })
