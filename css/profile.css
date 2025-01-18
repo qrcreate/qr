@@ -31,10 +31,22 @@ body {
   
   .edit-form {
     margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px; /* Limit width for larger screens */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
   }
   
   .form-group {
     margin-bottom: 20px;
+    width: 100%;
   }
   
   .form-group label {
@@ -47,6 +59,7 @@ body {
   .form-group input {
     width: 100%;
     padding: 10px;
+    max-width: 500px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
@@ -61,7 +74,8 @@ body {
   .submit-button {
     display: block;
     width: 100%;
-    padding: 10px;
+    max-width: 500px;
+    padding: 12px;
     font-size: 16px;
     background-color: #0056b3;
     color: #fff;
@@ -75,4 +89,24 @@ body {
   .submit-button:hover {
     background-color: #00408a;
   }
+
+  @media (max-width: 768px) {
+    .edit-form {
+        padding: 15px;
+        width: 90%;  /* Form takes up more space on smaller screens */
+        margin-top: 20px; /* Add a bit of spacing at the top */
+    }
+
+    .form-group input {
+        max-width: 100%; /* Ensure input fields take up the full width of the form */
+        width: 100%;  /* Ensure inputs don't exceed form width */
+        box-sizing: border-box; /* Ensure padding doesn't overflow */
+    }
+
+    .submit-button {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
   

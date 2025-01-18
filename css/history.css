@@ -59,28 +59,44 @@ body {
     align-items: center;
     justify-content: center;
   }
+
+  .edit-btn {
+    color: #4CAF50; /* Green color for edit */
+}
+
+.edit-btn:hover {
+    color: #388E3C; 
+}
   
   .download-btn {
     color: #0056b3;
   }
+
+  .download-btn:hover {
+    color: #00408a; 
+}
   
   .delete-btn {
     color: #ff4d4f;
   }
+
+  .delete-btn:hover {
+    color: #e60000; 
+}
   
   @media (max-width: 768px) {
     .item-details h2 {
-      font-size: 14px; /* Ukuran font lebih kecil di mobile */
+      font-size: 14px;
     }
   
     .item-details p {
-      font-size: 12px; /* Tetap kecil untuk efisiensi ruang */
+      font-size: 12px; 
     }
   
     .item-actions button {
-      font-size: 16px; /* Ukuran ikon lebih kecil di mobile */
-      width: 35px; /* Konsisten ukuran ikon di mobile */
-      height: 35px; /* Konsisten ukuran ikon di mobile */
+      font-size: 16px;
+      width: 35px; 
+      height: 35px; 
     }
   }
   
@@ -103,7 +119,7 @@ body {
   /* Footer Styles */
   .footer {
     background-color: #0056b3;
-    display: none;
+    display: flex;
     justify-content: space-around;
     align-items: center;
     position: fixed;
@@ -118,6 +134,7 @@ body {
     text-decoration: none;
     font-size: 14px;
     text-align: center;
+    transition: color 0.3s;
   }
   
   .footer .menu-item.active {
@@ -131,7 +148,11 @@ body {
   .footer .menu-item span {
     display: block;
     margin-top: 5px;
-    font-size: 12px;
+    font-size: 14px;
+  }
+
+  .menu-item:hover {
+    color: #D3D3D3; 
   }
   
   /* Show footer only on mobile */

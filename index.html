@@ -22,14 +22,12 @@
         <div id="url" class="tab-content active">
           <input type="url" id="urlInput" placeholder="Masukkan URL Anda" />
           <input type="text" id="urlName" placeholder="Masukkan Nama QR Code Anda" />
-          <input type="file" id="logoInput" onclick="uploadImage()" accept="image/*" placeholder="Unggah Logo (Opsional)" />
-          
-          <button id="generateBtn">Buat QR Code</button>
+          <button  id="generateBtn">Buat QR Code</button>
       </div>
 
         <!-- Output QR Code -->
         <div id="qrcode" style="display: none;">
-          <h3></h3>
+          <h3 id="qrName" ></h3>
           <canvas></canvas>
           <div class="button-group">
             <a id="downloadBtn" style="display: none;">
@@ -42,8 +40,7 @@
     </div>
 
     <footer class="footer">
-      <div class="footer-menu">
-        <a href="index.html" class="menu-item">
+        <a href="index.html" class="menu-item active">
           <i class="fas fa-home"></i>
           <span>Home</span>
         </a>
@@ -58,10 +55,8 @@
         <a href="logout.html" class="menu-item">
           <i class="fas fa-sign-out-alt"></i><span>Logout</span>
         </a>
-      </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
     <script type="module" src="js/index.js"></script>
-    <script type="module" src="js/ghupload.js"></script>
   </body>
 </html>
