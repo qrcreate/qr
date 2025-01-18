@@ -1,5 +1,8 @@
 import { getJSON, deleteJSON, putJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
+import {getCookie} from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
+import {redirect} from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/url.js";
+
 
 function fetchHistory() {
   const token = getCookie("login");
@@ -9,15 +12,15 @@ function fetchHistory() {
       title: "Unauthorized",
       text: "You must be logged in to view history.",
     }).then(() => {
-      redirect = "https://yourloginpage.com";
+      redirect("/login");
     });
     return;
   }
 
   getJSON(
-    "https://yourapi.com/get/qr",
-    "Authorization",
-    `Bearer ${token}`,
+    "https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/get/qr", 
+    "login",
+    getCookie("login"),
     (response) => {
       if (response.status === 200) {
         renderHistory(response.data);
@@ -32,9 +35,10 @@ function fetchHistory() {
   );
 }
 
+// Render the QR history into the HTML container
 function renderHistory(historyItems) {
   const container = document.querySelector(".history-container");
-  container.innerHTML = ""; 
+  container.innerHTML = ""; // Clear existing history
 
   historyItems.forEach((item) => {
     const historyItem = document.createElement("div");
@@ -43,15 +47,14 @@ function renderHistory(historyItems) {
     historyItem.innerHTML = `
       <div class="item-details">
         <h2>${item.name}</h2>
-        <p>Time: ${item.createdAt}</p>
+        <p>Time: ${new Date(item.createdAt).toLocaleString()}</p> <!-- Format the date -->
       </div>
-        <button class="edit-btn" data-id="${item.id}">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="delete-btn" data-id="${item.id}">
-          <i class="fas fa-trash"></i>
-        </button>
-      </div>
+      <button class="edit-btn" data-id="${item.id}">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button class="delete-btn" data-id="${item.id}">
+        <i class="fas fa-trash"></i>
+      </button>
     `;
     container.appendChild(historyItem);
   });
@@ -59,19 +62,21 @@ function renderHistory(historyItems) {
   document.querySelectorAll(".edit-btn").forEach((button) => {
     button.addEventListener("click", () => editQR(button.dataset.id));
   });
+
   document.querySelectorAll(".delete-btn").forEach((button) => {
     button.addEventListener("click", () => deleteQR(button.dataset.id));
   });
 }
 
-function editQR(qrId) {
+// Edit a QR code based on its ID
+function editQR(id) {
   const token = getCookie("login");
-  const url = `https://yourapi.com/get/qr/${qrId}`;
-  
+  const url = `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/get/qr?id=${id}`;
+
   fetch(url, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+      login: token,
     },
   })
     .then((response) => response.json())
@@ -87,12 +92,12 @@ function editQR(qrId) {
         preConfirm: () => {
           const updatedName = document.getElementById('edit-name').value;
           const updatedUrl = document.getElementById('edit-url').value;
-          return { name: updatedName, url: updatedUrl  };
+          return { name: updatedName, url: updatedUrl };
         }
       }).then((result) => {
         if (result.isConfirmed) {
           const { name, url } = result.value;
-          updateQR(qrId, name, url); 
+          updateQR(id, name, url); 
         }
       });
     })
@@ -105,14 +110,15 @@ function editQR(qrId) {
     });
 }
 
-function updateQR(qrId, name, url) {
-  const token = getCookie("token");
+// Update the QR code with the provided data
+function updateQR(id, name, url) {
+  const token = getCookie("login");
   const data = { name, url };
 
   putJSON(
-    `https://yourapi.com/put/qr/${qrId}`,
-    "Authorization",
-    `Bearer ${token}`,
+    `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/put/qr?id=${id}`, // Ensure the URL matches your endpoint
+    "login",
+    token,
     data,
     (response) => {
       if (response.status === 200) {
@@ -121,7 +127,7 @@ function updateQR(qrId, name, url) {
           title: "Updated",
           text: "QR code updated successfully.",
         }).then(() => {
-          fetchHistory(); 
+          fetchHistory(); // Reload the history
         });
       } else {
         Swal.fire({
@@ -134,13 +140,13 @@ function updateQR(qrId, name, url) {
   );
 }
 
-// Delete QR code
-function deleteQR(qrId) {
-  const token = getCookie("token");
+// Delete the QR code by ID
+function deleteQR(id) {
+  const token = getCookie("login");
   deleteJSON(
-    `https://yourapi.com/delete/qr/${qrId}`,
-    "Authorization",
-    `Bearer ${token}`,
+    `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/delete/qr?id=${id}`, // Ensure the URL matches your endpoint
+    "login",
+    token,
     {},
     (response) => {
       if (response.status === 200) {
@@ -149,7 +155,7 @@ function deleteQR(qrId) {
           title: "Deleted",
           text: "QR code deleted successfully.",
         }).then(() => {
-          fetchHistory();
+          fetchHistory(); // Reload the history
         });
       } else {
         Swal.fire({
