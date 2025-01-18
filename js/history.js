@@ -1,115 +1,144 @@
-import {
-  getJSON,
-  deleteJSON,
-} from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
-import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/cookie@0.0.1/croot.js";
+import { getJSON, deleteJSON, putJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
 
-// Fungsi untuk mendapatkan data history
 function fetchHistory() {
-  const token = getCookie("token"); // Ambil token dari cookie
+  const token = getCookie("login");
   if (!token) {
     Swal.fire({
       icon: "error",
       title: "Unauthorized",
       text: "You must be logged in to view history.",
     }).then(() => {
-      window.location.href = "login.html"; // Redirect ke halaman login
+      redirect = "https://yourloginpage.com";
     });
     return;
   }
 
-  // Panggil API backend
   getJSON(
-    "https://api.example.com/api/history", // Ganti dengan endpoint backend Anda
+    "https://yourapi.com/get/qr",
     "Authorization",
     `Bearer ${token}`,
     (response) => {
       if (response.status === 200) {
-        renderHistory(response.data); // Tampilkan data history
+        renderHistory(response.data);
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: response.data.message || "Failed to fetch history.",
+          text: response.message || "Failed to fetch history.",
         });
       }
     }
   );
 }
 
-// Fungsi untuk menampilkan data history
 function renderHistory(historyItems) {
   const container = document.querySelector(".history-container");
-  container.innerHTML = ""; // Bersihkan kontainer
+  container.innerHTML = ""; 
 
   historyItems.forEach((item) => {
     const historyItem = document.createElement("div");
     historyItem.classList.add("history-item");
 
     historyItem.innerHTML = `
-            <div class="item-details">
-                <h2>${item.name} (${item.type})</h2>
-                <p>Date: ${item.date}</p>
-                <p>Time: ${item.time}</p>
-            </div>
-            <div class="item-actions">
-                <button class="download-btn" data-id="${item.id}">
-                    <i class="fas fa-download"></i>
-                </button>
-                <button class="delete-btn" data-id="${item.id}">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-
+      <div class="item-details">
+        <h2>${item.name}</h2>
+        <p>Time: ${item.createdAt}</p>
+      </div>
+        <button class="edit-btn" data-id="${item.id}">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="delete-btn" data-id="${item.id}">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    `;
     container.appendChild(historyItem);
   });
 
-  // Tambahkan event listener untuk tombol download dan delete
-  document.querySelectorAll(".download-btn").forEach((button) => {
-    button.addEventListener("click", () => downloadQR(button.dataset.id));
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+    button.addEventListener("click", () => editQR(button.dataset.id));
   });
   document.querySelectorAll(".delete-btn").forEach((button) => {
     button.addEventListener("click", () => deleteQR(button.dataset.id));
   });
 }
 
-// Fungsi untuk mendownload QR
-function downloadQR(qrId) {
-  const token = getCookie("token");
-  const url = `https://api.example.com/api/qrcode/${qrId}/download`; // Endpoint download QR
+function editQR(qrId) {
+  const token = getCookie("login");
+  const url = `https://yourapi.com/get/qr/${qrId}`;
+  
   fetch(url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((response) => response.blob())
-    .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = "qr-code.png"; // Nama file yang akan diunduh
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
+    .then((response) => response.json())
+    .then((data) => {
+      Swal.fire({
+        title: 'Edit QR Code',
+        html: `
+          <input id="edit-name" class="swal2-input" value="${data.name}" placeholder="QR Name">
+          <input id="edit-url" class="swal2-input" value="${data.url}" placeholder="QR URL">
+        `,
+        confirmButtonText: 'Save Changes',
+        showCancelButton: true,
+        preConfirm: () => {
+          const updatedName = document.getElementById('edit-name').value;
+          const updatedUrl = document.getElementById('edit-url').value;
+          return { name: updatedName, url: updatedUrl  };
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const { name, url } = result.value;
+          updateQR(qrId, name, url); 
+        }
+      });
     })
     .catch((error) => {
       Swal.fire({
         icon: "error",
-        title: "Download Failed",
-        text: "Failed to download QR code.",
+        title: "Error",
+        text: "Failed to fetch QR code details.",
       });
     });
 }
 
-// Fungsi untuk menghapus QR
+function updateQR(qrId, name, url) {
+  const token = getCookie("token");
+  const data = { name, url };
+
+  putJSON(
+    `https://yourapi.com/put/qr/${qrId}`,
+    "Authorization",
+    `Bearer ${token}`,
+    data,
+    (response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Updated",
+          text: "QR code updated successfully.",
+        }).then(() => {
+          fetchHistory(); 
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: response.message || "Failed to update QR code.",
+        });
+      }
+    }
+  );
+}
+
+// Delete QR code
 function deleteQR(qrId) {
   const token = getCookie("token");
   deleteJSON(
-    `https://api.example.com/api/qrcode/${qrId}`, // Endpoint delete QR
+    `https://yourapi.com/delete/qr/${qrId}`,
     "Authorization",
     `Bearer ${token}`,
     {},
@@ -120,18 +149,17 @@ function deleteQR(qrId) {
           title: "Deleted",
           text: "QR code deleted successfully.",
         }).then(() => {
-          fetchHistory(); // Refresh data history
+          fetchHistory();
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: response.data.message || "Failed to delete QR code.",
+          text: response.message || "Failed to delete QR code.",
         });
       }
     }
   );
 }
 
-// Panggil fungsi untuk fetch data history saat halaman dimuat
 document.addEventListener("DOMContentLoaded", fetchHistory);
