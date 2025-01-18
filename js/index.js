@@ -1,24 +1,27 @@
 import { onClick, setInner } from 'https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.3/element.js';
 import { getCookie, setCookieWithExpireDay } from 'https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.3/cookie.js';
+import { postJSON } from 'https://cdn.jsdelivr.net/gh/jscroot/lib@0.2.0/api.js'; // Import postJSON
+import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
 
-// Fungsi untuk menghasilkan QR code
 function generateQRCode(event) {
   event.preventDefault(); // Mencegah refresh halaman ketika tombol diklik
 
   const url = document.getElementById('urlInput').value;
   const name = document.getElementById('urlName').value;
 
-  // Validasi input
   if (!url || !name) {
-    alert("Harap masukkan URL dan nama QR Code");
+    Swal.fire({
+      icon: "error",
+      title: "Input Tidak Lengkap",
+      text: "Harap masukkan URL dan nama QR Code.",
+    });
     return;
   }
 
   // Menyimpan URL dan nama ke cookie
-  setCookieWithExpireDay("qrcontent", url, 365); // Menyimpan URL
-  setCookieWithExpireDay("alias", name, 365); // Menyimpan nama QR Code
+  setCookieWithExpireDay("qrcontent", url, 365);
+  setCookieWithExpireDay("alias", name, 365); 
 
-  // Menyembunyikan form dan menampilkan QR Code
   document.getElementById('url').style.display = 'none';
   document.getElementById('qrcode').style.display = 'block';
   document.querySelector('h1').style.display = 'none';
@@ -29,12 +32,51 @@ function generateQRCode(event) {
     if (error) {
       console.error("Error generating QR code:", error);
     } else {
-      // Menampilkan tombol download setelah QR Code dibuat
       document.getElementById('downloadBtn').style.display = 'inline-block';
       document.getElementById('buatBaruBtn').style.display = 'inline-block';
       document.getElementById('qrName').textContent = `${name}`;
+
+      // Kirim data QR code ke server menggunakan metode POST
+      sendQRCodeToServer(url, name);
     }
   });
+}
+
+// Fungsi untuk mengirim data QR code ke server
+function sendQRCodeToServer(url, name) {
+  const token = getCookie("login");
+  if (!token) {
+    Swal.fire({
+      icon: "error",
+      title: "Unauthorized",
+      text: "You must be logged in to save QR code.",
+    });
+    return;
+  }
+
+  const data = { name, url }; // Data yang akan dikirim ke server
+
+  postJSON(
+    "https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/post/qr",
+    "login",
+    token,
+    data,
+    (response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "QR Code Created",
+          text: "QR Code has been successfully created and saved.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: response.message || "Failed to save QR code.",
+        });
+      }
+    }
+  );
 }
 
 // Fungsi untuk mendownload QR Code
@@ -48,14 +90,11 @@ function downloadQRCode() {
   link.click();
 }
 
-// Fungsi untuk membuat QR code baru
 function createNewQRCode() {
-  // Menyembunyikan QR code lama dan menampilkan form
   document.querySelector('h1').style.display = 'none';
   document.getElementById('url').style.display = 'block';
   document.getElementById('qrcode').style.display = 'none';
 
-  // Reset input fields
   document.getElementById('urlInput').value = '';
   document.getElementById('urlName').value = '';
 
@@ -63,7 +102,6 @@ function createNewQRCode() {
   document.getElementById('buatBaruBtn').style.display = 'none';
 }
 
-// Menambahkan event listener untuk tombol
-onClick('generateBtn', generateQRCode); // Tombol untuk generate QR Code
-onClick('downloadBtn', downloadQRCode); // Tombol untuk download QR Code
-onClick('buatBaruBtn', createNewQRCode); // Tombol untuk buat QR Code baru
+onClick('generateBtn', generateQRCode); 
+onClick('downloadBtn', downloadQRCode); 
+onClick('buatBaruBtn', createNewQRCode); 
