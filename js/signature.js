@@ -1,38 +1,58 @@
 import { onClick, setInner } from 'https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.3/element.js';
 import { getCookie, setCookieWithExpireDay } from 'https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.3/cookie.js';
 
-// Fungsi untuk menghasilkan QR code
+// Fungsi untuk generate QR Code
 function generateQRCode(event) {
-  event.preventDefault(); // Mencegah refresh halaman ketika tombol diklik
+  event.preventDefault();
 
-  const url = document.getElementById('urlInput').value;
-  const urlName = document.getElementById('urlName').value;
+  const signatureText = document.getElementById('signatureTextInput').value; // Input Teks
+  const signatureImageInput = document.getElementById('signatureImageInput'); // Input Gambar
+  const signatureName = document.getElementById('signatureName').value;
 
-  // Validasi input
-  if (!url || !urlName) {
-    alert("Harap masukkan URL dan nama QR Code");
+  let signatureContent = '';
+
+  // Menentukan apakah tanda tangan berbentuk teks atau gambar
+  if (signatureText) {
+    signatureContent = signatureText; // Gunakan teks jika ada input teks
+  } else if (signatureImageInput.files && signatureImageInput.files[0]) {
+    // Jika gambar dipilih, konversi gambar ke URL data
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imageUrl = e.target.result;
+      createQRFromDataUrl(imageUrl, signatureName);
+    };
+    reader.readAsDataURL(signatureImageInput.files[0]);
+    return; // Menghentikan proses sementara hingga gambar diproses
+  } else {
+    alert("Harap masukkan Teks Tanda Tangan atau Unggah Gambar.");
     return;
   }
 
+  // Jika teks tanda tangan tersedia, buat QR
+  createQRFromDataUrl(signatureContent, signatureName);
+}
+
+// Fungsi untuk membuat QR code dari teks atau data URL
+function createQRFromDataUrl(content, alias) {
   // Menyimpan URL dan nama ke cookie
-  setCookieWithExpireDay("qrcontent", url, 365); // Menyimpan URL
-  setCookieWithExpireDay("alias", urlName, 365); // Menyimpan nama QR Code
+  setCookieWithExpireDay("qrcontent", content, 365); // Menyimpan URL
+  setCookieWithExpireDay("alias", alias, 365); // Menyimpan nama QR Code
 
   // Menyembunyikan form dan menampilkan QR Code
   document.getElementById('tab').style.display = 'none';
-  document.getElementById('url').style.display = 'none';
+  document.getElementById('signature').style.display = 'none';
   document.getElementById('qrcode').style.display = 'block';
 
   // Generate QR Code menggunakan qrcode.js
   const canvas = document.querySelector('#qrcode canvas');
-  QRCode.toCanvas(canvas, url, { width: 300 }, function (error) {
+  QRCode.toCanvas(canvas, content, { width: 300 }, function (error) {
     if (error) {
       console.error("Error generating QR code:", error);
     } else {
       // Menampilkan tombol download setelah QR Code dibuat
       document.getElementById('downloadBtn').style.display = 'inline-block';
       document.getElementById('buatBaruBtn').style.display = 'inline-block';
-      setInner('qrcode h3', `QR Code untuk: ${urlName}`); // Menampilkan nama QR
+      setInner('qrcode h3', `QR Code untuk: ${alias}`); // Menampilkan nama QR
     }
   });
 }
@@ -52,13 +72,15 @@ function downloadQRCode() {
 function createNewQRCode() {
   // Menyembunyikan QR code lama dan menampilkan form
   document.getElementById('tab').style.display = 'block';
-  document.getElementById('url').style.display = 'block';
+  document.getElementById('signature').style.display = 'block';
   document.getElementById('qrcode').style.display = 'none';
 
   // Reset input fields
-  document.getElementById('urlInput').value = '';
-  document.getElementById('urlName').value = '';
+  document.getElementById('signatureTextInput').value = '';
+  document.getElementById('signatureImageInput').value = '';
+  document.getElementById('signatureName').value = '';
 
+  // Menyembunyikan tombol download QR dan tombol buat QR baru
   document.getElementById('downloadBtn').style.display = 'none';
   document.getElementById('buatBaruBtn').style.display = 'none';
 }

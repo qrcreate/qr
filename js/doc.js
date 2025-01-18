@@ -5,36 +5,47 @@ import { getCookie, setCookieWithExpireDay } from 'https://cdn.jsdelivr.net/gh/j
 function generateQRCode(event) {
   event.preventDefault(); // Mencegah refresh halaman ketika tombol diklik
 
-  const url = document.getElementById('urlInput').value;
-  const urlName = document.getElementById('urlName').value;
+  const documentInput = document.getElementById('documentInput'); // Input file
+  const documentName = document.getElementById('documentName').value;
 
-  // Validasi input
-  if (!url || !urlName) {
-    alert("Harap masukkan URL dan nama QR Code");
+  if (!documentInput.files[0] || !documentName) {
+    alert("Harap unggah dokumen dan masukkan nama QR Code");
     return;
   }
 
-  // Menyimpan URL dan nama ke cookie
-  setCookieWithExpireDay("qrcontent", url, 365); // Menyimpan URL
-  setCookieWithExpireDay("alias", urlName, 365); // Menyimpan nama QR Code
+  // Membaca file yang diunggah menggunakan FileReader
+  const file = documentInput.files[0];
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    // Ambil data URL dari file
+    const fileDataUrl = e.target.result;
 
-  // Menyembunyikan form dan menampilkan QR Code
-  document.getElementById('tab').style.display = 'none';
-  document.getElementById('url').style.display = 'none';
-  document.getElementById('qrcode').style.display = 'block';
+    // Menyimpan file dan nama ke cookie (opsional)
+    setCookieWithExpireDay("qrcontent", fileDataUrl, 365); // Menyimpan URL Data
+    setCookieWithExpireDay("alias", documentName, 365); // Menyimpan nama QR Code
 
-  // Generate QR Code menggunakan qrcode.js
-  const canvas = document.querySelector('#qrcode canvas');
-  QRCode.toCanvas(canvas, url, { width: 300 }, function (error) {
-    if (error) {
-      console.error("Error generating QR code:", error);
-    } else {
-      // Menampilkan tombol download setelah QR Code dibuat
-      document.getElementById('downloadBtn').style.display = 'inline-block';
-      document.getElementById('buatBaruBtn').style.display = 'inline-block';
-      setInner('qrcode h3', `QR Code untuk: ${urlName}`); // Menampilkan nama QR
-    }
-  });
+    // Menyembunyikan form dan menampilkan QR Code
+    document.getElementById('tab').style.display = 'none';
+    document.getElementById('document').style.display = 'none';
+    document.getElementById('qrcode').style.display = 'block';
+
+    // Generate QR Code menggunakan qrcode.js
+    const canvas = document.querySelector('#qrcode canvas');
+    QRCode.toCanvas(canvas, fileDataUrl, { width: 300 }, function (error) {
+      if (error) {
+        console.error("Error generating QR code:", error);
+      } else {
+        // Menampilkan tombol download setelah QR Code dibuat
+        document.getElementById('downloadBtn').style.display = 'inline-block';
+        document.getElementById('buatBaruBtn').style.display = 'inline-block';
+        setInner('qrcode h3', `QR Code untuk: ${documentName}`); // Menampilkan nama QR
+      }
+    });
+  };
+
+  // Membaca file sebagai Data URL
+  reader.readAsDataURL(file);
 }
 
 // Fungsi untuk mendownload QR Code
@@ -52,12 +63,12 @@ function downloadQRCode() {
 function createNewQRCode() {
   // Menyembunyikan QR code lama dan menampilkan form
   document.getElementById('tab').style.display = 'block';
-  document.getElementById('url').style.display = 'block';
+  document.getElementById('document').style.display = 'block';
   document.getElementById('qrcode').style.display = 'none';
 
   // Reset input fields
-  document.getElementById('urlInput').value = '';
-  document.getElementById('urlName').value = '';
+  document.getElementById('documentInput').value = '';
+  document.getElementById('documentName').value = '';
 
   document.getElementById('downloadBtn').style.display = 'none';
   document.getElementById('buatBaruBtn').style.display = 'none';

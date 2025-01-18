@@ -18,17 +18,14 @@
     <div class="container">
       <div class="left-content">
         <h1>Buat Kode QR</h1>
-        <div id="tab" class="tab-buttons">
-          <button onclick="window.location.href='index.html'" class="tab-btn active">URL</button>
-          <button onclick="window.location.href='doc.html'" class="tab-btn">Dokumen</button>
-          <button onclick="window.location.href='signature.html'" class="tab-btn">Tanda Tangan</button>
-        </div>
 
         <div id="url" class="tab-content active">
           <input type="url" id="urlInput" placeholder="Masukkan URL Anda" />
           <input type="text" id="urlName" placeholder="Masukkan Nama QR Code Anda" />
+          <input type="file" id="logoInput" onclick="uploadImage()" accept="image/*" placeholder="Unggah Logo (Opsional)" />
+          
           <button id="generateBtn">Buat QR Code</button>
-        </div>
+      </div>
 
         <!-- Output QR Code -->
         <div id="qrcode" style="display: none;">
@@ -65,5 +62,6 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
     <script type="module" src="js/index.js"></script>
+    <script type="module" src="js/ghupload.js"></script>
   </body>
 </html>
