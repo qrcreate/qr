@@ -100,34 +100,40 @@ function renderHistory(historyItems) {
 function viewQR(id) {
   const url = document.querySelector(`button[data-id="${id}"]`).dataset.url; // Ambil URL dari tombol yang diklik
 
-  // Generate the QR code from the URL
-  QRCode.toDataURL(
-    url,
-    { errorCorrectionLevel: "H" },
-    function (err, qrCodeDataURL) {
-      if (err) {
-        console.error(err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to generate QR code.",
-        });
-        return;
-      }
-
-      // Show the QR Code in a modal
+  // Generate the QR code from the URL using QRCode.js
+  QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function (err, qrCodeDataURL) {
+    if (err) {
+      console.error(err);
       Swal.fire({
-        title: "QR Code",
-        html: `
-        <p>Scan the QR Code below:</p>
-        <img src="${qrCodeDataURL}" alt="QR Code" style="max-width: 100%; height: auto;"/>
-      `,
-        showCloseButton: true,
-        confirmButtonText: "Close",
+        icon: "error",
+        title: "Error",
+        text: "Failed to generate QR code.",
       });
+      return;
     }
-  );
+
+    // Show the QR Code in a modal
+    Swal.fire({
+      title: "QR Code",
+      html: `
+        <p>Scan the QR Code below:</p>
+        <img src="${qrCodeDataURL}" alt="QR Code" style="max-width: 100%; height: auto;" />
+        <button class="download-btn" onclick="downloadQRCode('${qrCodeDataURL}')">Download QR Code</button>
+      `,
+      showCloseButton: true,
+      confirmButtonText: "Close",
+    });
+  });
 }
+
+// Fungsi untuk mendownload QR Code
+function downloadQRCode(qrCodeUrl) {
+  const link = document.createElement('a');
+  link.href = qrCodeUrl;
+  link.download = 'qr-code.png';
+  link.click();
+}
+
 
 // Edit QR Code
 function editQR(id) {
