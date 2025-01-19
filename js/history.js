@@ -81,26 +81,38 @@ function editQR(id) {
   })
   .then((response) => response.json())
   .then((data) => {
-    console.log(data); // Debugging log untuk memeriksa data yang diterima
-    Swal.fire({
-      title: 'Edit QR Code',
-      html: `
-        <input id="edit-name" class="swal2-input" value="${data.name || ''}" placeholder="QR Name">
-      `,
-      confirmButtonText: 'Save Changes',
-      showCancelButton: true,
-      preConfirm: () => {
-        const updatedName = document.getElementById('edit-name').value;
-        return { name: updatedName };
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const { name } = result.value;
-        updateQR(id, name); 
-      }
-    });
+    console.log("QR Data:", data); // Menampilkan data lengkap dari API untuk debugging
+
+    // Cek apakah data memiliki nama yang valid
+    if (data && data.name) {
+      Swal.fire({
+        title: 'Edit QR Code',
+        html: `
+          <input id="edit-name" class="swal2-input" value="${data.name  || ''}" placeholder="QR Name">
+        `,
+        confirmButtonText: 'Save Changes',
+        showCancelButton: true,
+        preConfirm: () => {
+          const updatedName = document.getElementById('edit-name').value;
+          return { name: updatedName }; // Mengembalikan data name yang diperbarui
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const { name } = result.value;
+          console.log("Updated Name:", name); // Menampilkan nilai nama yang akan diperbarui
+          updateQR(id, name);  // Memperbarui QR
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "QR Name is not available or invalid.",
+      });
+    }
   })
   .catch((error) => {
+    console.error("Fetch Error:", error); // Menampilkan error jika terjadi masalah pada fetch
     Swal.fire({
       icon: "error",
       title: "Error",
@@ -109,24 +121,26 @@ function editQR(id) {
   });
 }
 
-// Update the QR code with the provided data
-function updateQR(id, name, url) {
+function updateQR(id, name) {
   const token = getCookie("login");
-  const data = { name, url };
+  const data = { name };
+
+  console.log("Sending update for QR:", id, "with name:", name); // Debugging log untuk memverifikasi data yang dikirim
 
   putJSON(
-    `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/put/qr?id=${id}`, // Ensure the URL matches your endpoint
+    `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/put/qr?id=${id}`, 
     "login",
     token,
     data,
     (response) => {
+      console.log("Update Response:", response); // Menampilkan respons setelah update
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
           title: "Updated",
           text: "QR code updated successfully.",
         }).then(() => {
-          fetchHistory(); // Reload the history
+          fetchHistory(); // Reload the history to reflect the update
         });
       } else {
         Swal.fire({
@@ -138,6 +152,7 @@ function updateQR(id, name, url) {
     }
   );
 }
+
 
 // Delete the QR code by ID
 function deleteQR(id) {
