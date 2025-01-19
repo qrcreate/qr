@@ -72,7 +72,7 @@ function sendQRCodeToServer(url, name) {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: response.message || "Failed to save QR code.",
+          text: response.message || "Failed to save QR code. Nama QR sudah ada",
         });
       }
     }
