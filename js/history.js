@@ -136,7 +136,7 @@ function deleteQR(id) {
         getCookie("login"),
         () => {
           Swal.fire("Deleted!", "The QR history has been deleted.", "success");
-          fetchHistory(); // Re-fetch the history
+          fetchHistory(); 
         }
       );
     }
