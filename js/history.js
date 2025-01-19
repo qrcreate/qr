@@ -16,7 +16,7 @@ function fetchHistory() {
       title: "Unauthorized",
       text: "You must be logged in to view history.",
     }).then(() => {
-      redirect("../login");
+      window.location.href = "../login";
     });
     return;
   }
