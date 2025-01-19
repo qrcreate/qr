@@ -6,6 +6,7 @@ import {
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
 import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
 
+// Fetch History
 function fetchHistory() {
   const token = getCookie("login");
   if (!token) {
@@ -119,38 +120,52 @@ function viewQR(id) {
 // Edit QR Code
 function editQR(id) {
   const token = getCookie("login");
-  const name = prompt("Enter new QR code name:");
-  if (name) {
-    const data = { name: name };
 
-    // Send PUT request to update QR
-    putJSON(
-      `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/put/qr?id=${id}`,
-      "login",
-      token,
-      data,
-      (response) => {
-        if (response.status === 200) {
-          Swal.fire({
-            title: "Success",
-            text: "QR Code updated successfully!",
-            icon: "success",
-          });
-          fetchHistory(); // Reload the history
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: response.message || "Failed to update QR code.",
-          });
-        }
+  // Create a modal for input
+  Swal.fire({
+    title: "Edit QR Code Name",
+    html: `<input id="edit-name" class="swal2-input" placeholder="Enter new QR name">`,
+    showCancelButton: true,
+    confirmButtonText: "Save",
+    preConfirm: () => {
+      const newName = document.getElementById('edit-name').value;
+      if (!newName) {
+        Swal.showValidationMessage('Please enter a new QR code name');
+        return false;
       }
-    );
-  }
+      return newName;
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const data = { name: result.value };
+
+      // Send PUT request to update QR
+      putJSON(
+        `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/put/qr?id=${id}`,
+        "login",
+        token,
+        data,
+        (response) => {
+          if (response.status === 200) {
+            Swal.fire({
+              title: "Success",
+              text: "QR Code updated successfully!",
+              icon: "success",
+            });
+            fetchHistory(); // Reload the history
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: response.message || "Failed to update QR code.",
+            });
+          }
+        }
+      );
+    }
+  });
 }
 
-
-// Delete QR History
 // Delete QR History
 function deleteQR(id) {
   const token = getCookie("login");
@@ -169,8 +184,19 @@ function deleteQR(id) {
         "login",
         token,
         () => {
-          Swal.fire("Deleted!", "The QR history has been deleted.", "success");
+          Swal.fire({
+            title: "Deleted!",
+            text: "The QR history has been deleted.",
+            icon: "success",
+          });
           fetchHistory(); // Reload the history after deletion
+        },
+        (error) => {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to delete QR history.",
+            icon: "error",
+          });
         }
       );
     }
