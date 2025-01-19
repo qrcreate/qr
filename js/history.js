@@ -97,6 +97,7 @@ function renderHistory(historyItems) {
 }
 
 // View QR Code
+// Melihat QR Code
 function viewQR(id) {
   const token = getCookie("login");
   const url = `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/get/qr?id=${id}`;
@@ -108,24 +109,42 @@ function viewQR(id) {
     .then((response) => response.json())
     .then((data) => {
       if (data && data.qrCode) {
+        // Menampilkan modal atau div untuk menampilkan QR code
         Swal.fire({
-          title: "QR Code",
+          title: data.name, // Nama dari QR Code
           html: `
             <p>${data.name}</p>
-            <img src="${data.qrCode}" alt="QR Code" />
+            <img src="${data.qrCode}" alt="QR Code" style="max-width: 300px; margin-bottom: 20px;" />
+            <button class="download-btn" onclick="downloadQRCode('${data.qrCode}')">Download QR Code</button>
           `,
           showCloseButton: true,
-          confirmButtonText: "Close",
+          confirmButtonText: "Tutup",
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Failed to retrieve QR code.",
+          text: "Gagal mengambil QR code.",
         });
       }
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Terjadi kesalahan saat mengambil QR code.",
+      });
     });
 }
+
+// Fungsi untuk mendownload QR Code
+function downloadQRCode(qrCodeUrl) {
+  const link = document.createElement('a');
+  link.href = qrCodeUrl;
+  link.download = 'qr-code.png';
+  link.click();
+}
+
 
 // Edit QR Code
 function editQR(id) {
