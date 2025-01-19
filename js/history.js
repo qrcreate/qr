@@ -183,22 +183,22 @@ function deleteQR(id) {
         `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/delete/qr?id=${id}`,
         "login",
         token,
-        () => {
-          Swal.fire({
-            title: "Deleted!",
-            text: "The QR history has been deleted.",
-            icon: "success",
-          });
-          fetchHistory(); // Reload the history after deletion
-        },
-        (error) => {
-          Swal.fire({
-            title: "Error",
-            text: "Failed to delete QR history.",
-            icon: "error",
+        (response) =>{
+          if (response.status === 200) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "The QR history has been deleted.",
+              icon: "success",
+            });
+            fetchHistory(); 
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: response.message || "Failed to delete QR history.",
           });
         }
-      );
+    });
     }
   });
 }
