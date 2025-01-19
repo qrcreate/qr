@@ -79,33 +79,34 @@ function editQR(id) {
       login: token,
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      Swal.fire({
-        title: 'Edit QR Code',
-        html: `
-          <input id="edit-name" class="swal2-input" value="${data.name}" placeholder="QR Name">
-        `,
-        confirmButtonText: 'Save Changes',
-        showCancelButton: true,
-        preConfirm: () => {
-          const updatedName = document.getElementById('edit-name').value;
-          return { name: updatedName };
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const { name } = result.value;
-          updateQR(id, name); 
-        }
-      });
-    })
-    .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to fetch QR code details.",
-      });
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data); // Debugging log untuk memeriksa data yang diterima
+    Swal.fire({
+      title: 'Edit QR Code',
+      html: `
+        <input id="edit-name" class="swal2-input" value="${data.name || ''}" placeholder="QR Name">
+      `,
+      confirmButtonText: 'Save Changes',
+      showCancelButton: true,
+      preConfirm: () => {
+        const updatedName = document.getElementById('edit-name').value;
+        return { name: updatedName };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const { name } = result.value;
+        updateQR(id, name); 
+      }
     });
+  })
+  .catch((error) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Failed to fetch QR code details.",
+    });
+  });
 }
 
 // Update the QR code with the provided data
