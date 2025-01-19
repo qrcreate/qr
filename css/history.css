@@ -72,22 +72,18 @@ body {
 }
 
 .view-btn {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 5px;
+  color: #0056b3; 
 }
 
 .view-btn:hover {
-  background-color: #388E3C; /* Efek saat hover */
+  color: #003f75; /* Darker blue color when hovered */
 }
 
 .view-btn i {
-  margin-right: 8px;
+  font-size: 20px;
+  margin: 0; /* Remove the margin if present */
 }
+
 
 .edit-btn {
   color: #4CAF50;
@@ -168,6 +164,8 @@ body {
   color: #D3D3D3;
 }
 
+
+
 /* Tampilkan footer hanya di perangkat mobile */
 @media (max-width: 768px) {
   .footer {
@@ -175,8 +173,12 @@ body {
   }
 
   .history-item {
-      flex-direction: column; /* Agar elemen dalam history-item berbaris vertikal */
-      align-items: flex-start;
+      flex-direction: row; /* Agar elemen dalam history-item berbaris vertikal */
+      align-items: space-between;
+  }
+
+  .history-item .item-details {
+    flex-grow: 1; /* Allow the text to take available space */
   }
 
   .history-item .item-details h2 {
@@ -188,9 +190,10 @@ body {
   }
 
   .history-item .item-actions {
-      margin-top: 10px;
-      display: flex;
-      gap: 15px;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end; /* Align the buttons to the right */
+    width: auto;
   }
 
   .history-item .item-actions button {

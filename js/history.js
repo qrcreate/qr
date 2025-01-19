@@ -27,17 +27,17 @@ function fetchHistory() {
     (response) => {
       if (response.status === 200) {
         if (response.data.length === 0) {
-          // If no QR history exists
+          // If no QR history exists, show info message
           Swal.fire({
             icon: "info",
             title: "No QR History",
             text: "You haven't created any QR codes yet.",
           });
         } else {
-          // Render the history if data exists
           renderHistory(response.data);
         }
       } else {
+        // If the status is not 200, show error message
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -45,9 +45,8 @@ function fetchHistory() {
         });
       }
     }
-  );
+);
 }
-
 
 // Render History Items
 function renderHistory(historyItems) {
@@ -61,7 +60,7 @@ function renderHistory(historyItems) {
     const date = new Date(item.createdAt);
     const formattedDate =
       date instanceof Date && !isNaN(date)
-        ? date.toLocaleString()
+        ? date.toLocaleString("en-ID", { timeZone: "Asia/Jakarta" }) // Set time zone explicitly
         : "Invalid Date";
 
     historyItem.innerHTML = `
@@ -71,7 +70,7 @@ function renderHistory(historyItems) {
       </div>
       <div class="item-actions">
           <button class="view-btn" data-id="${item.id}">
-              <i class="fas fa-eye"></i> View QR
+              <i class="fas fa-eye"></i>
           </button>
           <button class="edit-btn" data-id="${item.id}">
               <i class="fas fa-edit"></i>
@@ -202,7 +201,7 @@ function deleteQR(id) {
               text: "The QR history has been deleted.",
               icon: "success",
             });
-            fetchHistory();
+            fetchHistory(); // Reload the history
           } else {
             Swal.fire({
               icon: "error",
@@ -215,7 +214,6 @@ function deleteQR(id) {
     }
   });
 }
-
 
 // Fetch history on load
 document.addEventListener("DOMContentLoaded", fetchHistory);
