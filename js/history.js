@@ -23,15 +23,15 @@ function fetchHistory() {
   getJSON(
     "https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/get/qr",
     "login",
-    getCookie("login"),
+    token,
     (response) => {
-      if (response.status === 200) {
+      if (response && response.status === 200) {
         renderHistory(response.data);
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: response.message || "Failed to fetch history.",
+          text: response?.message || "Failed to fetch history.",
         });
       }
     }
@@ -54,22 +54,22 @@ function renderHistory(historyItems) {
         : "Invalid Date";
 
     historyItem.innerHTML = `
-          <div class="item-details">
-              <h2>${item.name}</h2>
-              <p>Time: ${formattedDate}</p>
-          </div>
-          <div class="item-actions">
-              <button class="view-btn" data-id="${item.id}">
-                  <i class="fas fa-eye"></i> View QR
-              </button>
-              <button class="edit-btn" data-id="${item.id}">
-                  <i class="fas fa-edit"></i>
-              </button>
-              <button class="delete-btn" data-id="${item.id}">
-                  <i class="fas fa-trash"></i>
-              </button>
-          </div>
-      `;
+        <div class="item-details">
+            <h2>${item.name}</h2>
+            <p>Time: ${formattedDate}</p>
+        </div>
+        <div class="item-actions">
+            <button class="view-btn" data-id="${item.id}">
+                <i class="fas fa-eye"></i> View QR
+            </button>
+            <button class="edit-btn" data-id="${item.id}">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="delete-btn" data-id="${item.id}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
     container.appendChild(historyItem);
   });
 
@@ -101,9 +101,9 @@ function viewQR(id) {
         Swal.fire({
           title: "QR Code",
           html: `
-                    <p>${data.name}</p>
-                    <img src="${data.qrCode}" alt="QR Code" />
-                `,
+              <p>${data.name}</p>
+              <img src="${data.qrCode}" alt="QR Code" />
+          `,
           showCloseButton: true,
           confirmButtonText: "Close",
         });
@@ -114,7 +114,24 @@ function viewQR(id) {
           text: "Failed to retrieve QR code.",
         });
       }
+    })
+    .catch((error) => {
+      console.error("View QR Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "An error occurred while retrieving the QR code.",
+      });
     });
+}
+
+// Edit QR Code (Placeholder Function)
+function editQR(id) {
+  Swal.fire({
+    title: "Edit QR Code",
+    text: `Feature not implemented for ID: ${id}`,
+    icon: "info",
+  });
 }
 
 // Delete QR History
@@ -132,10 +149,14 @@ function deleteQR(id) {
       deleteJSON(
         `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/delete/qr?id=${id}`,
         "login",
-        getCookie("login"),
-        () => {
-          Swal.fire("Deleted!", "The QR history has been deleted.", "success");
-          fetchHistory(); 
+        token,
+        (response) => {
+          if (response && response.status === 200) {
+            Swal.fire("Deleted!", "The QR history has been deleted.", "success");
+            fetchHistory();
+          } else {
+            Swal.fire("Error!", "Failed to delete the QR history.", "error");
+          }
         }
       );
     }
