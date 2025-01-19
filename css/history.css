@@ -1,164 +1,232 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-  }
-  
-  .header {
-    background-color: #0056b3;
-    color: white;
-    padding: 15px;
-    text-align: center;
-  }
-  
-  .history-container {
-    padding: 20px;
-  }
-  
-  .history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .item-details {
-    flex: 1; /* Mengisi ruang yang tersedia */
-    margin-right: 10px; /* Jarak antara teks dan ikon */
-  }
-  
-  .item-details h2 {
-    font-size: 16px; /* Ukuran font lebih kecil untuk mobile */
-    margin-bottom: 5px;
-  }
-  
-  .item-details p {
-    font-size: 12px; /* Ukuran font untuk tanggal dan waktu */
-    color: #666;
-    margin: 2px 0;
-  }
-  
-  .item-actions {
-    display: flex;
-    gap: 10px; /* Jarak antara ikon */
-  }
-  
-  .item-actions button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    width: 40px; /* Konsisten ukuran ikon */
-    height: 40px; /* Konsisten ukuran ikon */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
 
-  .edit-btn {
-    color: #4CAF50; /* Green color for edit */
+.header {
+  background-color: #0056b3;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.history-container {
+  padding: 20px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease; /* Animasi saat hover */
+}
+
+.history-item.clicked {
+  background-color: #f0f0f0; /* Warna latar belakang saat item diklik */
+  transform: scale(1.05); /* Efek zoom saat diklik */
+}
+
+.history-item:hover {
+  background-color: #f7f7f7; /* Warna latar belakang saat hover */
+  transform: scale(1.03); /* Efek sedikit zoom */
+}
+
+.item-details {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.item-details h2 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.item-details p {
+  font-size: 12px;
+  color: #666;
+  margin: 2px 0;
+}
+
+.item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.item-actions button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+.view-btn:hover {
+  background-color: #388E3C; /* Efek saat hover */
+}
+
+.view-btn i {
+  margin-right: 8px;
+}
+
+.edit-btn {
+  color: #4CAF50;
 }
 
 .edit-btn:hover {
-    color: #388E3C; 
+  color: #388E3C;
 }
-  
-  .download-btn {
-    color: #0056b3;
-  }
 
-  .download-btn:hover {
-    color: #00408a; 
+.download-btn {
+  color: #0056b3;
 }
-  
-  .delete-btn {
-    color: #ff4d4f;
-  }
 
-  .delete-btn:hover {
-    color: #e60000; 
+.download-btn:hover {
+  color: #00408a; 
 }
-  
-  @media (max-width: 768px) {
-    .item-details h2 {
-      font-size: 14px;
-    }
-  
-    .item-details p {
-      font-size: 12px; 
-    }
-  
-    .item-actions button {
-      font-size: 16px;
-      width: 35px; 
-      height: 35px; 
-    }
-  }
-  
-  .generate-qr-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 15px 30px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .generate-qr-btn:hover {
-    background-color: #00408a;
-  }
-  
-  /* Footer Styles */
+
+.delete-btn {
+  color: #ff4d4f;
+}
+
+.delete-btn:hover {
+  color: #e60000; 
+}
+
+.generate-qr-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 15px 30px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.generate-qr-btn:hover {
+  background-color: #00408a;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #0056b3;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer .menu-item {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.footer .menu-item.active {
+  color: #ffdf00;
+}
+
+.footer .menu-item i {
+  font-size: 20px;
+}
+
+.footer .menu-item span {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.menu-item:hover {
+  color: #D3D3D3;
+}
+
+/* Tampilkan footer hanya di perangkat mobile */
+@media (max-width: 768px) {
   .footer {
-    background-color: #0056b3;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .footer .menu-item {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    text-align: center;
-    transition: color 0.3s;
-  }
-  
-  .footer .menu-item.active {
-    color: #ffdf00;
-  }
-  
-  .footer .menu-item i {
-    font-size: 20px;
-  }
-  
-  .footer .menu-item span {
-    display: block;
-    margin-top: 5px;
-    font-size: 14px;
+      display: flex;
   }
 
-  .menu-item:hover {
-    color: #D3D3D3; 
+  .history-item {
+      flex-direction: column; /* Agar elemen dalam history-item berbaris vertikal */
+      align-items: flex-start;
   }
-  
-  /* Show footer only on mobile */
-  @media (max-width: 768px) {
-    .footer {
+
+  .history-item .item-details h2 {
+      font-size: 14px;
+  }
+
+  .history-item .item-details p {
+      font-size: 12px;
+  }
+
+  .history-item .item-actions {
+      margin-top: 10px;
       display: flex;
-    }
+      gap: 15px;
   }
-  
+
+  .history-item .item-actions button {
+      font-size: 16px;
+      width: 35px;
+      height: 35px;
+  }
+
+  .footer .menu-item {
+      font-size: 12px;
+  }
+}
+
+/* SweetAlert Styling */
+.swal2-popup {
+  max-width: 500px;
+  text-align: center;
+  padding: 20px;
+}
+
+.swal2-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.swal2-content {
+  font-size: 14px;
+}
+
+.swal2-image {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 15px;
+  border-radius: 5px;
+}
+
+.swal2-close {
+  color: #ff4d4f;
+}
