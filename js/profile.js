@@ -1,59 +1,86 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const profileImgInput = document.getElementById("profile-img");
-    const profilePreview = document.getElementById("profilePreview");
+import { getJSON, putJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
+import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
+import {getCookie} from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
 
-    // URL endpoint backend untuk profile
-    const target_url = "https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/qr/user";
+document.addEventListener('DOMContentLoaded', function() {
+    const token = getCookie('login');
 
-    profileImgInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                profilePreview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    if (token) {
+        fetchUserData(token);
+    } else {
+        console.log("Token tidak ditemukan");
+    }
 
-    const cancelBtn = document.querySelector(".cancel-btn");
-    const saveBtn = document.querySelector(".save-btn");
+    document.getElementById('save-button').addEventListener('click', function() {
+        const name = document.getElementById('name').value.trim();
 
-    cancelBtn.addEventListener("click", () => {
-        if (confirm("Are you sure you want to discard changes?")) {
-            window.location.reload();
-        }
-    });
-
-    document.querySelector(".profile-form").addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(event.target);
-        const profileData = {
-            name: formData.get("name"),
-            email: formData.get("email"),
-            profileImg: profilePreview.src
-        };
-
-        try {
-            const response = await fetch(target_url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(profileData)
+        if (name === "") {
+            Swal.fire({
+                icon: "error",
+                title: "Nama Tidak Boleh Kosong",
+                text: "Pastikan kamu mengisi nama dengan benar.",
             });
-
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            }
-
-            const result = await response.json();
-            alert("Profile updated successfully!");
-            console.log("Server Response:", result);
-        } catch (error) {
-            console.error("Failed to update profile:", error);
-            alert("Failed to update profile. Please try again later.");
+            return;
         }
+
+        updateUserData(token, name);
     });
 });
+
+function fetchUserData(token) {
+    const token = getCookie("login");
+  if (!token) {
+    Swal.fire({
+      icon: "error",
+      title: "Unauthorized",
+      text: "You must be logged in to view history.",
+    }).then(() => {
+      redirect("/login");
+    });
+    return;
+  }
+
+    getJSON("https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/data/user","login",getCookie("login"))
+        .then(data => {
+            if (data.status === "Error") {
+                console.error("Error fetching user data:", data.response);
+            } else {
+                document.getElementById('name').value = data.name || '';
+                document.getElementById('phonenumber').value = data.phonenumber || '';
+                document.getElementById('email').value = data.email || '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function updateUserData(token, name) {
+    const data = { name };
+
+    putJSON("https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/data/user", "login",token, data)
+        .then(response => {
+            if (response.status === "Error") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal Memperbarui Data",
+                    text: response.response,
+                });
+            } else {
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil Memperbarui Data",
+                    text: "Nama Anda berhasil diperbarui.",
+                });
+                fetchUserData(token); 
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Gagal Terhubung ke Server",
+                text: "Terjadi kesalahan saat memperbarui data.",
+            });
+        });
+}
