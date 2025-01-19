@@ -5,7 +5,6 @@ import {
 } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
 import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
-import { redirect } from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/url.js";
 
 // Fetch History
 function fetchHistory() {
@@ -16,7 +15,7 @@ function fetchHistory() {
       title: "Unauthorized",
       text: "You must be logged in to view history.",
     }).then(() => {
-      window.location.href = "../login";
+      window.location.href = "https://qrcreate.github.io/login/";
     });
     return;
   }
