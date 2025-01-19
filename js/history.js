@@ -6,7 +6,7 @@ import {
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
 import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
 
-// Fetch History
+/// Fetch History
 function fetchHistory() {
   const token = getCookie("login");
   if (!token) {
@@ -26,7 +26,17 @@ function fetchHistory() {
     getCookie("login"),
     (response) => {
       if (response.status === 200) {
-        renderHistory(response.data);
+        if (response.data.length === 0) {
+          // If no QR history exists
+          Swal.fire({
+            icon: "info",
+            title: "No QR History",
+            text: "You haven't created any QR codes yet.",
+          });
+        } else {
+          // Render the history if data exists
+          renderHistory(response.data);
+        }
       } else {
         Swal.fire({
           icon: "error",
@@ -37,6 +47,7 @@ function fetchHistory() {
     }
   );
 }
+
 
 // Render History Items
 function renderHistory(historyItems) {
@@ -191,11 +202,8 @@ function deleteQR(id) {
               text: "The QR history has been deleted.",
               icon: "success",
             });
-
-            // After deletion, refresh the history list
-            fetchHistory(); // Reload the history
+            fetchHistory();
           } else {
-            // Error: Show error message
             Swal.fire({
               icon: "error",
               title: "Error",
@@ -203,14 +211,6 @@ function deleteQR(id) {
             });
           }
         },
-        (error) => {
-          // If there is a network or server issue
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "An error occurred while trying to delete. Please try again.",
-          });
-        }
       );
     }
   });
