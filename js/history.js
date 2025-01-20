@@ -118,7 +118,7 @@ function viewQR(id) {
       html: `
         <p>Scan the QR Code below:</p>
         <img src="${qrCodeDataURL}" alt="QR Code" style="max-width: 100%; height: auto;" />
-        <button class="download-btn" onclick="downloadQRCode('${qrCodeDataURL}')">Download QR Code</button>
+      
       `,
       showCloseButton: true,
       confirmButtonText: "Close",
