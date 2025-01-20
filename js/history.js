@@ -88,41 +88,32 @@ function renderHistory(historyItems) {
 
 // View QR Code
 function viewQR(id) {
-  const token = getCookie("login");
-  const url = `https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/get/qr?id=${id}`;
-
-  fetch(url, {
-    method: "GET",
-    headers: { login: token },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data && data.qrCode) {
-        Swal.fire({
-          title: "QR Code",
-          html: `
-              <p>${data.name}</p>
-              <img src="${data.qrCode}" alt="QR Code" />
-          `,
-          showCloseButton: true,
-          confirmButtonText: "Close",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Gagal mengambil kode QR",
-        });
-      }
-    })
-    .catch((error) => {
-      console.error("View QR Error:", error);
+  const url = document.querySelector(`button[data-id="${id}"]`).dataset.url; // Ambil URL dari tombol yang diklik
+  const name = document.querySelector(`button[data-id="${id}"]`).dataset.name; 
+  // Generate the QR code from the URL using QRCode.js
+  QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function (err, qrCodeDataURL) {
+    if (err) {
+      console.error(err);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Terjadi kesalahan saat mengambil kode QR.",
+        text: "Failed to generate QR code.",
       });
+      return;
+    }
+
+    // Show the QR Code in a modal
+    Swal.fire({
+      title: "QR Code",
+      html: `
+        <p>Scan the QR Code below:</p>
+        <img src="${qrCodeDataURL}" alt="QR Code" style="max-width: 100%; height: auto;" />
+        <button class="download-btn" onclick="downloadQRCode('${qrCodeDataURL}')">Download QR Code</button>
+      `,
+      showCloseButton: true,
+      confirmButtonText: "Close",
     });
+  });
 }
 
 // Edit QR Code (Placeholder Function)

@@ -1,8 +1,9 @@
 import { getJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
+import { setValue } from "https://cdn.jsdelivr.net/gh/jscroot/element@0.1.5/croot.js"; // Mengimpor setValue
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
 import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
 
-// Fungsi untuk mengambil data pengguna
+
 function fetchUserData() {
     const token = getCookie("login"); // Mengambil token dari cookie
     if (!token) {
@@ -16,8 +17,8 @@ function fetchUserData() {
         return;
     }
 
-    // Request data user dari API menggunakan jscroot
-    getJSON("https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/data/user","login",getCookie("login"))
+   
+    getJSON("https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/data/user", "login", token)
         .then(data => {
             if (data.status === "Error") {
                 Swal.fire({
@@ -27,10 +28,10 @@ function fetchUserData() {
                 });
                 console.error("Error fetching user data:", data.response);
             } else {
-                // Mengisi form dengan data pengguna yang diterima
-                document.getElementById("name").value = data.name || '';
-                document.getElementById("phonenumber").value = data.phonenumber || '';
-                document.getElementById("email").value = data.email || '';
+               
+                setValue("name", data.name || ''); 
+                setValue("phonenumber", data.phonenumber || ''); 
+                setValue("email", data.email || ''); 
                 console.log("User data fetched successfully:", data);
             }
         })
@@ -44,6 +45,4 @@ function fetchUserData() {
         });
 }
 
-// Memastikan DOM sudah siap sebelum memanggil fetchUserData
 document.addEventListener('DOMContentLoaded', fetchUserData);
-
