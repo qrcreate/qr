@@ -1,86 +1,49 @@
-import { getJSON, putJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
+import { getJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.8/croot.js";
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js";
-import {getCookie} from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
+import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/lib@0.1.8/cookie.js";
 
-document.addEventListener('DOMContentLoaded', function() {
-    const token = getCookie('login');
-
-    if (token) {
-        fetchUserData(token);
-    } else {
-        console.log("Token tidak ditemukan");
+// Fungsi untuk mengambil data pengguna
+function fetchUserData() {
+    const token = getCookie("login"); // Mengambil token dari cookie
+    if (!token) {
+        Swal.fire({
+            icon: "error",
+            title: "Unauthorized",
+            text: "You must be logged in to view your profile.",
+        }).then(() => {
+            window.location.href = "https://qrcreate.github.io/login/";
+        });
+        return;
     }
 
-    document.getElementById('save-button').addEventListener('click', function() {
-        const name = document.getElementById('name').value.trim();
-
-        if (name === "") {
-            Swal.fire({
-                icon: "error",
-                title: "Nama Tidak Boleh Kosong",
-                text: "Pastikan kamu mengisi nama dengan benar.",
-            });
-            return;
-        }
-
-        updateUserData(token, name);
-    });
-});
-
-function fetchUserData(token) {
-    const token = getCookie("login");
-  if (!token) {
-    Swal.fire({
-      icon: "error",
-      title: "Unauthorized",
-      text: "You must be logged in to view history.",
-    }).then(() => {
-      redirect("/login");
-    });
-    return;
-  }
-
+    // Request data user dari API menggunakan jscroot
     getJSON("https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/data/user","login",getCookie("login"))
         .then(data => {
             if (data.status === "Error") {
-                console.error("Error fetching user data:", data.response);
-            } else {
-                document.getElementById('name').value = data.name || '';
-                document.getElementById('phonenumber').value = data.phonenumber || '';
-                document.getElementById('email').value = data.email || '';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-function updateUserData(token, name) {
-    const data = { name };
-
-    putJSON("https://asia-southeast2-qrcreate-447114.cloudfunctions.net/qrcreate/data/user", "login",token, data)
-        .then(response => {
-            if (response.status === "Error") {
                 Swal.fire({
                     icon: "error",
-                    title: "Gagal Memperbarui Data",
-                    text: response.response,
+                    title: "Failed to Fetch Data",
+                    text: data.response,
                 });
+                console.error("Error fetching user data:", data.response);
             } else {
-                Swal.fire({
-                    icon: "success",
-                    title: "Berhasil Memperbarui Data",
-                    text: "Nama Anda berhasil diperbarui.",
-                });
-                fetchUserData(token); 
+                // Mengisi form dengan data pengguna yang diterima
+                document.getElementById("name").value = data.name || '';
+                document.getElementById("phonenumber").value = data.phonenumber || '';
+                document.getElementById("email").value = data.email || '';
+                console.log("User data fetched successfully:", data);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             Swal.fire({
                 icon: "error",
-                title: "Gagal Terhubung ke Server",
-                text: "Terjadi kesalahan saat memperbarui data.",
+                title: "Fetch Error",
+                text: "An error occurred while fetching user data.",
             });
+            console.error("Fetch error:", error);
         });
 }
+
+// Memastikan DOM sudah siap sebelum memanggil fetchUserData
+document.addEventListener('DOMContentLoaded', fetchUserData);
+
