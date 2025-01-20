@@ -9,7 +9,7 @@ function fetchUserData() {
         Swal.fire({
             icon: "error",
             title: "Unauthorized",
-            text: "You must be logged in to view your profile.",
+            text: "Kode QR telah berhasil dibuat dan disimpan.",
         }).then(() => {
             window.location.href = "https://qrcreate.github.io/login/";
         });
@@ -22,7 +22,7 @@ function fetchUserData() {
             if (data.status === "Error") {
                 Swal.fire({
                     icon: "error",
-                    title: "Failed to Fetch Data",
+                    title: "Gagal Mengambil Data",
                     text: data.response,
                 });
                 console.error("Error fetching user data:", data.response);
@@ -38,7 +38,7 @@ function fetchUserData() {
             Swal.fire({
                 icon: "error",
                 title: "Fetch Error",
-                text: "An error occurred while fetching user data.",
+                text: "Terjadi kesalahan saat mengambil data pengguna.",
             });
             console.error("Fetch error:", error);
         });
