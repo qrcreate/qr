@@ -66,13 +66,13 @@ function sendQRCodeToServer(url, name) {
         Swal.fire({
           icon: "success",
           title: "QR Code Created",
-          text: "QR Code has been successfully created and saved.",
+          text: "QR Code telah berhasil dibuat dan disimpan.",
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: response.message || "Failed to save QR code. Nama QR sudah ada",
+          text: response.message || "Gagal menyimpan QR code. Nama QR sudah ada",
         });
       }
     }
