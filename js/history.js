@@ -99,7 +99,7 @@ function renderHistory(historyItems) {
 // View QR Code
 function viewQR(id) {
   const url = document.querySelector(`button[data-id="${id}"]`).dataset.url; // Ambil URL dari tombol yang diklik
-
+  const name = document.querySelector(`button[data-id="${id}"]`).dataset.name; 
   // Generate the QR code from the URL using QRCode.js
   QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function (err, qrCodeDataURL) {
     if (err) {
@@ -114,7 +114,7 @@ function viewQR(id) {
 
     // Show the QR Code in a modal
     Swal.fire({
-      title: "QR Code",
+      title: name || "QR Code",
       html: `
         <p>Scan the QR Code below:</p>
         <img src="${qrCodeDataURL}" alt="QR Code" style="max-width: 100%; height: auto;" />
