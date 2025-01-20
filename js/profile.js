@@ -35,7 +35,7 @@ function fetchUserData(token) {
       title: "Unauthorized",
       text: "You must be logged in to view history.",
     }).then(() => {
-      redirect("/login");
+        window.location.href = "https://qrcreate.github.io/login/";
     });
     return;
   }

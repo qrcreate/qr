@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
   <link rel="stylesheet" href="css/profile.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -20,17 +21,20 @@
     <h2>Informasi Akun</h2> 
     <div class="form-group">
       <label for="name">Nama</label>
-      <input type="text" id="name" value="your name" placeholder="Enter your full name" >
+      <input type="text" id="name" value="" placeholder="Enter your full name" >
     </div>
     <div class="form-group">
       <label for="phonenumber">Nomor WA</label>
-      <input type="tel" id="phonenumber" value="628.." placeholder="Enter your phonenumber" disabled>
+      <input type="tel" id="phonenumber" value="" placeholder="628.." disabled>
     </div>
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="email" id="email" value="youremail@domain.com" placeholder="Enter your email" disabled>
+      <input type="email" id="email" value="" placeholder="your email" disabled>
     </div>
     <button id="save-button" class="submit-button">Simpan</button>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/src/sweetalert2.js"></script>
+  <script type="module" src="js/profile.js"></script>
+
 </body>
 </html>
